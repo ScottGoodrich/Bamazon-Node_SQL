@@ -1,6 +1,5 @@
 var mysql = require ("mysql");
 var inquirer = require("inquirer");
-var divider = "———————————————————————————————————";
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -45,8 +44,8 @@ connection.connect(function(err) {
                     chosenItem = res[i];
                   }
                 }
-                if (chosenItem.stock_quantity > parseInt(answers.quantity)) {
-                    var newQuantity = (chosenItem.stock_quantity - parseInt(answers.quantity));
+                if (chosenItem.stock_quantity >= parseInt(answers.quantity)) {
+                    var newQuantity = (chosenItem.stock_quantity) - parseInt(answers.quantity);
                   connection.query(
                     "UPDATE auctions SET ? WHERE ?",
                     [
