@@ -1,11 +1,13 @@
 var mysql = require ("mysql");
 var inquirer = require("inquirer");
+require("dotenv").config();
+var ID = process.env.ID_SECRET;
 
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "Baseballjunkie1",
+    password: ID,
     database: "bamazon"
   });
   
@@ -42,15 +44,15 @@ connection.connect(function(err) {
                 for (var i = 0; i < res.length; i++) {
                   if (res[i].item_id === answers.choice) {
                     chosenItem = res[i];
+                    var newValue = chosenItem.stock_quantity - parseInt(answers.quantity);
                   }
                 }
                 if (chosenItem.stock_quantity >= parseInt(answers.quantity)) {
-                    var newQuantity = (chosenItem.stock_quantity) - parseInt(answers.quantity);
                   connection.query(
-                    "UPDATE auctions SET ? WHERE ?",
+                    "UPDATE products SET ? WHERE ?",
                     [
                       {
-                        stock_quantity: newQuantity
+                        stock_quantity: newValue
                       },
                       {
                         item_id: chosenItem.item_id
